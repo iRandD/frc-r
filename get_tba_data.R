@@ -7,7 +7,7 @@ getTBAData <- function(url) {
   json <- httr::content(req, as = "text")
   data <- fromJSON(json) 
   if(length(data) > 0) {
-    data <- data %>% flatten(recursive = TRUE)
+    data <- data %>% jsonlite::flatten(recursive = TRUE)
   }
   return(data)
 }
