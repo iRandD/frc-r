@@ -56,6 +56,9 @@ team_opponent_scores <- function(matches,team_key) {
   c(team_red_opponent_scores(matches,team_key),team_blue_opponent_scores(matches,team_key))
 }
 
+our_scores <- matches %>% team_scores(our_team)
+our_opponent_scores <- matches %>% team_opponent_scores(our_team)
+win_loss_diff <- our_scores - our_opponent_scores
 
 comp_levels <- c("qm", "qf", "sf", "f")
 ```
