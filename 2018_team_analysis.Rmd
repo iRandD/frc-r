@@ -33,32 +33,27 @@ team_blue_alliances <- function(matches,team_key) {
 }
 
 team_red_scores <- function(matches,team_key) {
-  matches$alliances.red.score[team_red_alliances(matches,team_key)]
+  idx <- team_red_alliances(matches,team_key)
+  data.frame(time = matches$actual_time[idx], 
+             score = matches$alliances.red.score[idx],
+             opp_score = matches$alliances.blue.score[idx])
 }
 
 team_blue_scores <- function(matches,team_key) {
-  matches$alliances.blue.score[team_blue_alliances(matches,team_key)]
-}
-
-team_red_opponent_scores <- function(matches,team_key) {
-  matches$alliances.blue.score[team_red_alliances(matches,team_key)]
-}
-
-team_blue_opponent_scores <- function(matches,team_key) {
-  matches$alliances.red.score[team_blue_alliances(matches,team_key)]
+  idx <- team_blue_alliances(matches,team_key)
+  data.frame(time = matches$actual_time[idx], 
+             score = matches$alliances.blue.score[idx], 
+             opp_score = matches$alliances.red.score[idx])
 }
 
 team_scores <- function(matches,team_key) {
-  c(team_red_scores(matches,team_key),team_blue_scores(matches,team_key))
+  scores <- rbind(team_red_scores(matches,team_key),team_blue_scores(matches,team_key))
+  scores[order(scores$time),]
 }
 
-team_opponent_scores <- function(matches,team_key) {
-  c(team_red_opponent_scores(matches,team_key),team_blue_opponent_scores(matches,team_key))
-}
-
-our_scores <- matches %>% team_scores(our_team)
-our_opponent_scores <- matches %>% team_opponent_scores(our_team)
-win_loss_diff <- our_scores - our_opponent_scores
+perf <- team_scores(matches,our_team)
+plot(perf$time,perf$score,type="p",col="black",ylim=c(0,500))
+lines(perf$time,perf$opp_score,type="p",col="red")
 
 comp_levels <- c("qm", "qf", "sf", "f")
 ```
